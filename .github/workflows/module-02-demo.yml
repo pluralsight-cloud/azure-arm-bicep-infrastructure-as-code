@@ -1,0 +1,31 @@
+### GitHub Actions workflow for Module 02 Demo ###
+### Ensure that the AZURE_CREDENTIALS secret is set in your repository settings ###
+
+name: Module 02 Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy Azure Resource Group
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            ### Declare variables
+            rgName="ps-arm-module-02"
+            deploymentLocation="australiaeast"
+
+            ### Deploy a resource group ###
+            az group create \
+            --name $rgName \
+            --location $deploymentLocation \
+            --tags "Owner=James Bannan" "Purpose=Module 02 Demo"
