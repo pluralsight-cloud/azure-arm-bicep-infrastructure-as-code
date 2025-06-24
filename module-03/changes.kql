@@ -1,0 +1,11 @@
+resourcechanges
+| where type == "microsoft.resources/changes"
+| where properties.targetResourceId contains  "ps-arm-module-03"
+| project 
+resourceid = properties.targetResourceId, 
+changeType = properties.changeType, 
+operation = properties.changeAttributes.operation,
+changedByType = properties.changeAttributes.changedByType,
+changedBy = properties.changeAttributes.changedBy,
+clientType = properties.changeAttributes.clientType,
+changes = properties.changes
