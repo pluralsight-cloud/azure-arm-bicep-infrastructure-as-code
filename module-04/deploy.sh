@@ -17,3 +17,31 @@ az deployment group create \
   --resource-group $rgName \
   --template-uri $templateUrl \
   --parameters $parametersUrl
+
+### Compare Azure solution ###
+az deployment group what-if \
+  --name $deploymentName \
+  --resource-group $rgName \
+  --template-uri $templateUrl \
+  --parameters $parametersUrl
+
+### Export Azure solution - Before ###
+az group export \
+  --name $rgName \
+  --include-comments \
+  --include-parameter-default-value \
+  --output json > $rgName-before.json
+
+### Export Azure solution - After ###
+az group export \
+  --name $rgName \
+  --include-comments \
+  --include-parameter-default-value \
+  --output json > $rgName-after.json
+
+### Compare templates ###
+arm-compare \
+  --left $rgName-before.json \
+  --right $rgName-after.json \
+  --format markdown \
+  --output $rgName-diff.md
